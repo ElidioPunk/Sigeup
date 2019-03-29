@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import { Http, Headers, RequestOptions } from "@angular/http";
 
 
+
 //import { HttpClient } from '@angular/common/http' ;
 import { NavController, AlertController, LoadingController } from '@ionic/angular';
 
@@ -18,11 +19,33 @@ export class LoginPage implements OnInit {
   data: string;
   items: any;
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController,
-    private http: Http, public loading: LoadingController) { }
+  constructor(public navCtrl: NavController, public alertController: AlertController,
+    private http: Http, public loadingController: LoadingController) { }
 
   ngOnInit() {
   }
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      subHeader: 'Campos vazios',
+      message: 'Preeche o campo vazio.',
+      buttons: ['OK']
+    });
+
+    await alert.present();}
+
+    async presentLoadingWithOptions() {
+      const loading = await this.loadingController.create({
+        spinner: null,
+        duration: 5000,
+        message: 'Please wait...',
+        translucent: true,
+        cssClass: 'custom-class custom-loading'
+      });
+      return await loading.present();
+    }
+  
+
   signUp() {
     //this.navCtrl.navigateForward('');
   }
@@ -32,14 +55,14 @@ export class LoginPage implements OnInit {
 
     if (this.username.value == "") {
 
-      //alert user
+      this.presentAlert();
 
         
     } else
 
     if (this.password.value == "") {
 
-      // alert Pass
+      this.presentAlert();
 
     } else {
 
@@ -54,9 +77,9 @@ export class LoginPage implements OnInit {
         username: this.username.value,
         password: this.password.value
       };
-
       
-
+      
+        this.presentLoadingWithOptions();
         this.http.post('http://localhost:83/login.php', data).subscribe((res : any) => {
             console.log(res);
             this.items = res;

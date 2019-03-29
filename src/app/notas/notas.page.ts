@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Http, RequestOptions } from '@angular/http';
 
 @Component({
   selector: 'app-notas',
@@ -6,10 +7,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./notas.page.scss'],
 })
 export class NotasPage implements OnInit {
+ items: any;
+ 
+ @ViewChild("username") username;
+  constructor(public http: Http) { }
 
-  constructor() { }
-
-  ngOnInit() {
+  ngOnInit() { 
+    let data = {
+      displina: "ddddd"
+    };
+    this.http.post('http://localhost:83/fetch_data.php', data).subscribe((res : any) => {
+            console.log(res);
+            this.items = res;
+            console.log(this.items)
+          
+      });
   }
+
+
+  
+
 
 }
